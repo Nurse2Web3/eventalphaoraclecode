@@ -202,7 +202,7 @@ def well_known_x402():
             BASE_URL + "/signal/trending",
             BASE_URL + "/signal/arb"
         ],
-        "instructions": "# EventAlphaOracle v2.2\n\nReal-time prediction market signals combining Polymarket, Kalshi, and 40+ sportsbooks.\n\n## Endpoints\n- /signal/nba — NBA signals $0.01\n- /signal/nfl — NFL signals $0.01\n- /signal/mma — MMA signals $0.01\n- /signal/boxing — Boxing signals $0.01\n- /signal/politics — Polymarket vs Kalshi $0.02\n- /signal/trending — Top Polymarket markets $0.01\n- /signal/arb — Arbitrage scanner $0.02\n\n## Networks\nBase Mainnet (eip155:8453) | Monad Testnet (eip155:10143)\n\n## Provider\nNurse2Web3 — https://nurse2web3.com"
+        "instructions": "# EventAlphaOracle v2.3\n\nReal-time prediction market signals combining Polymarket, Kalshi, and 40+ sportsbooks.\n\n## Endpoints\n- /signal/nba — NBA signals $0.01\n- /signal/nfl — NFL signals $0.01\n- /signal/mma — MMA signals $0.01\n- /signal/boxing — Boxing signals $0.01\n- /signal/politics — Polymarket vs Kalshi $0.02\n- /signal/trending — Top Polymarket markets $0.01\n- /signal/arb — Arbitrage scanner $0.02\n\n## Networks\nBase Mainnet (eip155:8453) | Monad Testnet (eip155:10143) | Hedera Mainnet (eip155:295) | Algorand Mainnet\n\n## Provider\nNurse2Web3 — https://nurse2web3.com"
     })
 
 @app.route("/x402/discovery")
@@ -210,14 +210,14 @@ def x402_discovery():
     return jsonify({
         "x402Version": 2,
         "name": "EventAlphaOracle",
-        "version": "2.2",
-        "description": "Real-time prediction market signals combining Polymarket, Kalshi, and 40+ sportsbooks. Accepts payments on Base and Monad.",
+        "version": "2.3",
+        "description": "Real-time prediction market signals combining Polymarket, Kalshi, and 40+ sportsbooks. Accepts payments on Base, Monad, Hedera, and Algorand.",
         "provider": "Nurse2Web3",
         "url": BASE_URL,
         "discoverable": True,
         "category": "prediction-markets",
-        "tags": ["prediction-markets", "polymarket", "kalshi", "sports", "nba", "nfl", "mma", "boxing", "politics", "arbitrage", "monad", "base"],
-        "networks": ["base-mainnet", "monad-testnet"],
+        "tags": ["prediction-markets", "polymarket", "kalshi", "sports", "nba", "nfl", "mma", "boxing", "politics", "arbitrage", "monad", "base", "hedera", "algorand", "hbar"],
+        "networks": ["base-mainnet", "monad-testnet", "hedera-mainnet", "algorand-mainnet"],
         "endpoints": [
             {"path": "/signal/nba",      "price": "$0.01", "description": "NBA signals — real Vegas odds + Polymarket analysis"},
             {"path": "/signal/nfl",      "price": "$0.01", "description": "NFL signals — real Vegas odds + Polymarket analysis"},
@@ -236,7 +236,7 @@ def x402_discovery():
 def index():
     return jsonify({
         "api": "EventAlphaOracle",
-        "version": "2.2",
+        "version": "2.3",
         "description": "Real-time prediction market signals combining Polymarket, Kalshi, and 40+ sportsbooks",
         "endpoints": {
             "/signal/nba":      "$0.01 — NBA Vegas + Polymarket signals",
@@ -247,7 +247,7 @@ def index():
             "/signal/trending": "$0.01 — Top Polymarket markets by volume",
             "/signal/arb":      "$0.02 — Cross-platform arbitrage scanner"
         },
-        "networks": {"base": "eip155:8453 (mainnet)", "monad": "eip155:10143 (testnet)"},
+        "networks": {"base": "eip155:8453 (mainnet)", "monad": "eip155:10143 (testnet)", "hedera": "eip155:295 (mainnet)", "algorand": "algorand (mainnet)"},
         "wallet": WALLET_ADDRESS,
         "dataSources": ["Polymarket Gamma API", "Kalshi API", "The Odds API (40+ sportsbooks)"]
     })
@@ -255,11 +255,13 @@ def index():
 @app.route("/health")
 def health():
     return jsonify({
-        "status": "OK", "service": "EventAlphaOracle", "version": "2.2",
+        "status": "OK", "service": "EventAlphaOracle", "version": "2.3",
         "wallet": WALLET_ADDRESS, "x402": "enabled", "bazaar": "discoverable",
         "networks": {
             "base": "eip155:8453 (mainnet) — active",
-            "monad": "eip155:10143 (testnet) — active"
+            "monad": "eip155:10143 (testnet) — active",
+            "hedera": "eip155:295 (mainnet) — active",
+            "algorand": "algorand (mainnet) — active"
         },
         "pricing": {"nba": "$0.01", "nfl": "$0.01", "mma": "$0.01", "boxing": "$0.01", "trending": "$0.01", "politics": "$0.02", "arb": "$0.02"}
     })
