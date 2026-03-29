@@ -15,6 +15,9 @@ BASE_URL = os.environ.get("BASE_URL", "https://eventalphaoraclecode-production.u
 WALLET_ADDRESS = os.environ.get("WALLET_ADDRESS", "0x3278657Fd9013D48692C146Bb7FC730e67EAa192")
 USDC_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
 USDC_MONAD = "0x534b2f3A21130d7a60830c2Df862319e593943A3"
+USDC_HEDERA = "0x000000000000000000000000000000000006f89a"
+HEDERA_WALLET = "0x00000000000000000000000000000000008cd721"  # Hedera 0.0.9230113 (Tallytrades1)
+ALGORAND_WALLET = "5DWBO7N5KU3PXQHXLKDCEALRI4TEOLJG3KTBADTQ734TKZRWMFOA25VLKQ"
 
 DISCLAIMER = "\n\nNOT FINANCIAL ADVICE. Prediction markets carry risk."
 
@@ -23,9 +26,6 @@ def require_payment(amount_micro, description, example_input=None, example_outpu
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            bypass_key = request.headers.get("x-payment-signature")
-            if bypass_key == os.environ.get("ORACLE_BYPASS_KEY"):
-                return f(*args, **kwargs)
             payment_sig = (
                 request.headers.get("x-payment-signature") or
                 request.headers.get("X-Payment-Signature") or
@@ -53,6 +53,24 @@ def require_payment(amount_micro, description, example_input=None, example_outpu
                         "amount": str(amount_micro),
                         "maxTimeoutSeconds": 60,
                         "extra": {"name": "USDC", "version": "2", "facilitator": "https://x402-facilitator.molandak.org"}
+                    },
+                    {
+                        "scheme": "exact",
+                        "network": "eip155:295",
+                        "asset": USDC_HEDERA,
+                        "payTo": HEDERA_WALLET,
+                        "amount": str(amount_micro),
+                        "maxTimeoutSeconds": 60,
+                        "extra": {"name": "USDC", "version": "1", "facilitator": "https://x402.blockydevs.com"}
+                    },
+                    {
+                        "scheme": "exact",
+                        "network": "algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73k",
+                        "asset": "31566704",
+                        "payTo": ALGORAND_WALLET,
+                        "amount": str(amount_micro),
+                        "maxTimeoutSeconds": 60,
+                        "extra": {"name": "USDC", "version": "1", "facilitator": "https://facilitator.goplausible.xyz"}
                     }
                 ],
                 "resource": {
